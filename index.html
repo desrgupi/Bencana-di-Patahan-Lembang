@@ -1,0 +1,432 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+<meta charset="UTF-8"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<title>Bencana di Sesar Lembang</title> 
+<link rel="stylesheet" href="css/style.css"> 
+<a href="https://2b1494aed6f9d9.lhr.life/" target="_blank"></a> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<link rel="stylesheet" href="css/style1.css">
+
+<style>
+  .legend {
+    max-height: 300px;     /* Batasi tinggi agar bisa scroll */
+    overflow-y: auto;      /* Scroll vertikal aktif */
+    overflow-x: hidden;
+    padding: 10px;
+    background-color: rgba(255,255,255,0.5);
+    border-radius: 5px;
+    font-size: 12px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    width: 250px;          /* Tambahan jika kamu ingin lebar tetap */
+  }
+
+  .legend div {
+    width: 30px;
+    height: 5px;
+    float: left;
+    margin-right: 8px;
+    opacity: 1;
+  }
+
+  div.legend.leaflet-control br {
+    clear: both;
+  }
+
+  .leaflet-control-fullscreen-button {
+    background-color: rgb(255, 255, 255) !important;
+    background-image: none !important;
+  }
+
+  .leaflet-control-fullscreen-button::before {
+    content: '⛶';
+    color: rgb(0, 0, 0);
+    font-size: 18px;
+    display: block;
+    text-align: center;
+    line-height: 28px;
+  }
+
+  .leaflet-control-fullscreen-button:hover {
+    background-color: #ffffff !important;
+  }
+
+  /* === KODE CSS TAMBAHAN UNTUK 2 CARD SLIDER CUSTOM === */
+  .slider-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 40px auto 20px auto;
+    padding: 0 15px;
+    box-sizing: border-box;
+  }
+
+  .slider-wrapper {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 15px;
+    -ms-overflow-style: none;  
+    scrollbar-width: none;  
+  }
+
+  .slider-wrapper::-webkit-scrollbar {
+    display: none; 
+  }
+
+  .custom-card-slider {
+    flex: 0 0 calc(50% - 10px);
+    min-width: 280px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 30px 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    box-sizing: border-box;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border: 1px solid #eaddca;
+  }
+
+  .custom-card-slider h3 {
+    color: #664930;
+    margin: 15px 0 10px 0;
+    font-size: 20px;
+    font-family: Tahoma, sans-serif;
+  }
+
+  .custom-card-slider p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    flex-grow: 1;
+  }
+
+  .btn-slider {
+    display: inline-block;
+    background-color: #967d64;
+    color: white;
+    text-decoration: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-slider:hover {
+    background-color: #664930;
+  }
+
+  @media (max-width: 768px) {
+    .custom-card-slider {
+      flex: 0 0 100%;
+    }
+  }
+</style>
+
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easybutton.css">
+<link href='https://api.mapbox.com/mapbox.js/plugins/leafletfullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
+<link rel="stylesheet" href="https://balladaniel.github.io/leaflet-dataclassification/leafletdataclassification.css" />
+
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-
+20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+<script src='https://api.mapbox.com/mapbox.js/plugins/leafletfullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js"
+charset="utf-8"></script>
+<script src="https://balladaniel.github.io/leaflet-dataclassification/leafletdataclassification.js"></script>
+
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
+
+<link rel="stylesheet" 
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head> 
+
+<body> 
+<header id="navbar"> 
+    <div class="container"> 
+    <div class="logo"> 
+     <img src="assets/Provinsi-Jawa-Barat.png" alt="Logo" width="100"> 
+    <h1 style="color: #ffffff; font-family: Tahoma;"> Bencana di Sesar Lembang </h1> 
+    </div> 
+   <nav> 
+<ul> 
+    <li>
+        <a href="#hero-section">
+            <i class="fa-solid fa-house"></i> Beranda
+        </a>
+    </li> 
+
+    <li>
+        <a href="#sesar-section">
+            <i class="fa-solid fa-mountain"></i> Tinjauan Wilayah
+        </a>
+    </li> 
+
+    <li>
+        <a href="#map-section">
+            <i class="fa-solid fa-map"></i> Peta Bencana
+        </a>
+    </li>   
+</ul> 
+</nav>
+</header> 
+
+<div id="hero-section" class="hero-section" style="background-image: url('assets/Gunung_Batu.jpg');">      
+    <div class="hero-content">
+        <h1>Mengenal bencana mengintai di Sesar Lembang </h1>
+        <p>Informasi mengenai sebaran tingkat bahaya longsor dan gempa bumi di wilayah dilalui Sesar Lembang </p>
+        
+        <small style="color: #967d64; font-size: 11px; display: block; margin-top: 25px; opacity: 0.8; line-height: 1.4; font-family: Tahoma, sans-serif;">
+            Latar belakang: Foto oleh <a href="https://commons.wikimedia.org/w/index.php?title=User:Tyasnastitip&amp;action=edit&amp;redlink=1" target="_blank" style="color: #967d64; text-decoration: underline;">Tyasnastitip</a> 
+            (<a href="https://creativecommons.org/licenses/by-sa/4.0" target="_blank" style="color: #967d64; text-decoration: underline;">CC BY-SA 4.0</a> via <a href="https://commons.wikimedia.org/w/index.php?curid=65613696" target="_blank" style="color: #967d64; text-decoration: underline;">Wikimedia Commons</a>)
+        </small>
+    </div>
+</div>
+
+<div id="sesar-section">
+    <h2 style="font-family: Tahoma;">Tinjauan Wilayah</h2>
+    <div class="container">
+        <div class="column">
+            <div class="data-item">
+                <img src="assets/4.png" alt="Image 1">
+                <div class="description">
+                    <h3>Sejarah Sesar Lembang</h3>
+                    <p>
+                        Sesar Lembang adalah patahan aktif yang terletak di utara Kota Bandung, Jawa Barat,
+                        memanjang dari wilayah Padalarang hingga sekitar Gunung Manglayang dengan panjang 
+                        sekiritar ±29 km. Sesar ini menjadi salah satu sumber potensi gempa bumi utama di 
+                        kawasan Bandung Raya.
+                    </p>    
+                    <button class="read-more-btn" onclick="openPopup('popup1')">
+                       <b> Baca Selengkapnya </b>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="data-item">
+                <img src="assets/3.png" alt="Image 2">
+                <div class="description">
+                    <h3>Potensi Kebencanaan</h3>
+                    <p>
+                       Sesar Lembang memiliki potensi bencana yang cukup tinggi karena merupakan sesar aktif dan berada sangat dekat dengan kawasan padat penduduk di Bandung Raya. Jika terjadi pergerakan sesar yang signifikan, dampaknya dapat dirasakan di Kota Bandung, Cimahi, Kabupaten Bandung Barat, hingga sebagian Sumedang.
+                    </p>
+                    <button class="read-more-btn" onclick="openPopup('popup2')">
+                        Baca Selengkapnya
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="data-item">
+                <img src="assets/1.png" alt="Image 2">
+                <div class="description">
+                    <h3>Kesiapsiagaan</h3>
+                    <p>
+                       Kesiapsiagaan bencana bertujuan meminimalkan risiko dan dampak bencana melalui perencanaan, edukasi, serta penyediaan sarana pendukung yang memadai. Langkah ini membantu masyarakat bertindak cepat dan tepat saat bencana terjadi.
+                    </p>
+                    <button class="read-more-btn" onclick="openPopup('popup3')">
+                        Baca Selengkapnya
+                    </button>
+                </div>
+            </div>
+        </div>
+
+         <div class="column">
+            <div class="data-item">
+                <img src="assets/2.png" alt="Image 2">
+                <div class="description">
+                    <h3>Mitigasi</h3>
+                    <p>
+                       Mitigasi bencana merupakan langkah krusial yang perlu diimplementasikan ketika bencana datang. Mitigasi bencana memiliki perbedaan di setiap jenis bencananya, hal ini menjadi tugas masyarakat untuk mengetahui dan mampu melaksanakannya.
+                    </p>
+                    <button class="read-more-btn" onclick="openPopup('popup4')">
+                        Baca Selengkapnya
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div> <div class="slider-container">
+        <div class="slider-wrapper">
+            
+            <div class="custom-card-slider">
+                <i class="fa-brands fa-youtube" style="font-size: 55px; color: #664930;"></i>
+                <h3>Media Edukasi Video</h3>
+                <p>Tonton edukasi dan cerita di balik kisah Sesar Lembang untuk lebih memahami tempat kita berada.</p>
+                <a href="https://youtu.be/piTPwaCs-Ow?si=-YmYZV4Jb-UkKYUy" target="_blank" class="btn-slider">Tonton di YouTube</a>
+            </div>
+
+            <div class="custom-card-slider">
+                <i class="fa-solid fa-file-pdf" style="font-size: 55px; color: #664930;"></i>
+                <h3>Unduh Poster Mitigasi</h3>
+                <p>Akses pustaka digital untuk mengunduh poster kesiapsiagaan hingga mitigasi kebencanaan yang siap cetak.</p>
+                <a href="https://bnpb.go.id/siaga-bencana" target="_blank" class="btn-slider">Unduh Poster</a>
+            </div>
+
+        </div>
+    </div>
+    </div>
+
+<div id="popup1" class="popup">
+    <div class="popup-content" style="color:#664930; font-family:Tahoma; text-align:justify; line-height:1.5;">
+        <span class="close" onclick="closePopup('popup1')">&times;</span>
+        <h2>Sejarah Sesar Lembang</h2>
+        <p>
+            Sesar Lembang adalah patahan aktif yang terletak di utara Kota Bandung, 
+            Jawa Barat, memanjang dari wilayah Padalarang hingga sekitar Gunung Manglayang 
+            dengan panjang sekitar ±29 km. Sesar ini menjadi salah satu sumber potensi gempa 
+            bumi utama di kawasan Bandung Raya. Sesar Lembang terbentuk akibat aktivitas tektonik di Pulau Jawa yang dipengaruhi 
+            oleh pergerakan Lempeng Indo-Australia dan Lempeng Eurasia. Tekanan tektonik 
+            tersebut menyebabkan kerak bumi mengalami retakan dan pergeseran di wilayah 
+            Bandung bagian utara. Secara geologi, sesar ini diperkirakan mulai aktif sejak ribuan hingga ratusan ribu tahun lalu. 
+            Aktivitasnya berkaitan dengan perkembangan Cekungan Bandung purba setelah letusan besar Gunung Sunda purba.
+        </p>
+        <p>
+            Sesar Lembang termasuk jenis sesar geser (strike-slip fault) dengan komponen 
+            pergerakan vertikal. Bagian utara relatif bergerak naik dibandingkan bagian 
+            selatan. Akibat aktivitas tersebut, terbentuk tebing memanjang yang masih dapat 
+            dilihat di kawasan Lembang. Penelitian menunjukkan bahwa Sesar Lembang masih aktif hingga saat ini. Berdasarkan kajian geologi dan paleoseismologi:
+            <br>
+            <ul>
+            <li>Sesar ini bergerak sekitar 3–5 mm per tahun.</li>
+            <li>Diperkirakan pernah menghasilkan gempa besar pada masa lampau.</li>
+            <li>Potensi magnitudo gempa diperkirakan dapat mencapai sekitar M 6,5–7.</li>
+            </ul>
+            Aktivitas sesar ini terus dipantau oleh BMKG, BRIN, dan para peneliti karena lokasinya dekat dengan wilayah padat penduduk seperti Kota Bandung, Cimahi, dan Kabupaten Bandung Barat.
+        </p>
+    </div>
+</div>
+
+<div id="popup2" class="popup">
+    <div class="popup-content" style="color:#664930; font-family:Tahoma; text-align:justify; line-height:2;">
+        <span class="close" onclick="closePopup('popup2')">&times;</span>
+        <h2>Potensi Kebencanaan</h2>
+        <p>
+           Sesar Lembang memiliki potensi bencana yang cukup tinggi karena merupakan sesar aktif dan berada sangat dekat dengan kawasan padat penduduk di Bandung Raya. Jika terjadi pergerakan sesar yang signifikan, dampaknya dapat dirasakan di 
+           Kota Bandung, Cimahi, Kabupaten Bandung Barat, hingga sebagian Sumedang.<br> 
+           <br>
+           <b>Gempa Bumi Tektonik</b><br>
+            Potensi utama dari Sesar Lembang adalah gempa bumi tektonik. Aktivitas pergeseran batuan di sepanjang sesar dapat 
+            melepaskan energi dan menimbulkan guncangan gempa.
+           <ul>
+            <li> Magnitudo potensial diperkirakan mencapai sekitar M 6,5–7. </li>
+            <li>Guncangan dapat terasa kuat karena pusat gempa relatif dangkal.</li>
+            <li>Wilayah Bandung Raya berisiko mengalami kerusakan bangunan, terutama bangunan yang tidak tahan gempa.</li>
+           </ul>
+           <br>
+           <b>Longsor</b><br>
+            Wilayah utara Bandung dan kawasan Lembang memiliki topografi perbukitan yang curam. 
+            Guncangan gempa dapat memicu:
+           <ul>
+            <li> Longsor lereng. </li>
+            <li>Runtuhan batuan.</li>
+            <li>Pergerakan tanah di daerah rawan.</li>
+           </ul>
+        </p>
+    </div>
+</div>
+
+<div id="popup3" class="popup">
+    <div class="popup-content" style="color:#664930; font-family:Tahoma; text-align:justify; line-height:2;">
+        <span class="close" onclick="closePopup('popup3')">&times;</span>
+        <h2>Kesiapsiagaan Kebencanaan</h2>
+        <p>
+          <ul>
+            <li>Melakukan identifikasi risiko dan pemetaan daerah rawan bencana.</li>
+            <li>Memberikan edukasi dan sosialisasi kesiapsiagaan bencana kepada masyarakat.</li>
+            <li>Menyusun rencana tanggap darurat yang mencakup prosedur evakuasi dan titik kumpul.</li>
+            <li>Membangun dan menetapkan jalur evakuasi yang aman serta mudah diakses.</li>
+            <li>Mengembangkan infrastruktur yang tahan terhadap berbagai jenis bencana.</li>
+            <li>Meningkatkan sistem peringatan dini untuk mempercepat penyebaran informasi bencana.</li>
+            <li>Melaksanakan simulasi dan latihan kebencanaan secara berkala.</li>
+            <li>Memperkuat koordinasi dan kerja sama antar lembaga dalam penanggulangan bencana.</li>
+            <b>Source</b>: Badan Penanggulangan Bencana Daerah
+          </ul>
+        </p>
+    </div>
+</div>
+
+<div id="popup4" class="popup">
+    <div class="popup-content" style="color:#664930; font-family:Tahoma; text-align:justify; line-height:2;">
+        <span class="close" onclick="closePopup('popup4')">&times;</span>
+        <h2>Mitigasi Bencana</h2>
+        <p>
+           Mitigasi Bencana tergantung pada setiap jenis bencana yang terjadi. Pada mitigasi bencana longsor dan gempa Bumi
+           di sekitar Sesar Lembang pun memiliki variasi bentuk mitigasi. Berikut merupakan bentuk mitigasi dari bencana: <br> 
+           <br>
+           <b>Gempa Bumi Tektonik</b><br>
+           <ul>
+            <li>Membangun atau menempati bangunan yang telah memenuhi standar konstruksi tahan gempa.</li>
+            <li>Memahami kondisi dan karakteristik lingkungan serta bangunan tempat tinggal.</li>
+            <li>Menata perabot dan perlengkapan rumah secara aman agar tidak mudah jatuh saat terjadi gempa.</li>
+            <li>Mempersiapkan perlengkapan darurat seperti senter, kotak P3K, persediaan makanan siap saji, dan kebutuhan penting lainnya.</li>
+            <li>Memastikan instalasi listrik dan gas berada dalam kondisi aman serta berfungsi dengan baik.</li>
+            <li>Menyimpan dan mencatat nomor telepon darurat yang dapat dihubungi saat terjadi bencana.</li>
+            <li>Mengetahui lokasi dan arah jalur evakuasi yang tersedia di sekitar tempat tinggal.</li>
+            <li>Berpartisipasi dalam pelatihan atau simulasi kesiapsiagaan menghadapi bencana gempa bumi.</li>
+            <li>Tetap tenang dan tidak panik ketika gempa bumi terjadi.</li>
+            <li>Menjauhi bangunan, benda, atau struktur yang berpotensi runtuh, serta segera menuju area terbuka yang aman apabila memungkinkan.</li>
+            <li>Memperhatikan kondisi permukaan tanah di sekitar lokasi karena dapat terjadi retakan atau pergeseran tanah.</li>
+            <li>Segera menghentikan kendaraan, turun dengan aman, dan menjauhi wilayah pantai untuk mengantisipasi bahaya lanjutan.</li>
+            <li>Setelah guncangan berhenti, segera keluar dari bangunan melalui jalur evakuasi yang aman dan gunakan tangga biasa, bukan lift.</li>
+            <li>Memeriksa kondisi sekitar serta memberikan pertolongan pertama kepada korban yang mengalami luka jika memungkinkan.</li>
+            <li>Menghindari bangunan atau struktur yang mengalami kerusakan dan berpotensi mengalami keruntuhan.</li>
+           </ul>
+           <br>
+           <b>Longsor</b><br>
+           <ul>
+            <li>Menghindari pembangunan permukiman dan infrastruktur pada kawasan yang memiliki tingkat kerawanan longsor tinggi.</li>
+            <li>Mengurangi kemiringan lereng pada area tertentu untuk meningkatkan kestabilan tanah.</li>
+            <li>Menerapkan sistem terasering yang dilengkapi dengan drainase yang baik guna mengendalikan aliran air.</li>
+            <li>Melakukan penghijauan dengan menanam vegetasi berakar kuat dan dalam untuk membantu mengikat tanah.</li>
+            <li>Membangun struktur atau bangunan dengan pondasi yang kokoh dan sesuai dengan kondisi geologi setempat.</li>
+            <li>Menutup retakan yang muncul pada lereng untuk mencegah infiltrasi air berlebihan yang dapat memicu longsor.</li>
+            <li>Melaksanakan relokasi penduduk dari wilayah yang sangat berisiko apabila tindakan mitigasi lain tidak memadai.</li>
+            <li>Berbagai upaya tersebut merupakan langkah mitigasi yang bertujuan mengurangi risiko serta dampak yang ditimbulkan oleh bencana tanah longsor.</li>
+           </ul>
+           <b>Source</b>: Badan Penanggulangan Bencana Daerah
+        </p>
+    </div>
+</div>
+
+<script>
+function openPopup(id) {
+    document.getElementById(id).style.display = "block";
+}
+
+function closePopup(id) {
+    document.getElementById(id).style.display = "none";
+}
+</script>
+
+<div id="map-section">
+    <h2>Cek petanya di sini!</h2>
+    <div id="map">
+        </div>
+</div>
+
+<script src="js/script.js"></script>         
+</body>
+</html>
