@@ -202,44 +202,71 @@ body {
         word-wrap: break-word !important; /* Memaksa kata panjang patah ke bawah agar tidak keluar batas */
     }
 
-    /* ==========================================================================
-   PERBAIKAN TOMBOL TENGGELAM PADA CARD BIASA (Di dalam @media max-width: 900px)
+ /* ==========================================================================
+   PERBAIKAN TOTAL SESAR SECTION (Ganti kode sesar di dalam @media 900px Anda)
    ========================================================================== */
 @media (max-width: 900px) {
 
-    /* --- Kode responsif navbar, legenda, dll yang sudah ada tetap biarkan --- */
-    /* ... */
+    /* 1. Paksa container agar mau menurunkan card ke bawah (tidak memanjang ke samping) */
+    #sesar-section .container { 
+        display: flex !important;
+        flex-direction: column !important; /* Susun card vertikal ke bawah di HP */
+        align-items: center !important;
+        gap: 25px !important;              /* Memberi jarak antar boks card */
+        padding: 0 15px !important;
+    }
 
+    /* 2. Setel ulang lebar kolom agar memenuhi layar HP */
+    .column { 
+        flex: 1 1 100% !important; 
+        width: 100% !important;
+        max-width: 450px !important;       /* Membatasi lebar di HP agar tidak terlalu melar */
+        margin-bottom: 0 !important;       /* Reset margin desktop */
+    } 
 
-    /* --- KODE PERBAIKAN CARD NON-SLIDER --- */
-    
-    /* 1. Bebaskan tinggi kaku area deskripsi */
+    .data-item {
+        margin: 0 !important;
+        height: 100% !important;
+        overflow: visible !important;      /* Pastikan tidak memotong elemen di dalamnya */
+    }
+
+    /* 3. KUNCI UTAMA: Bebaskan tinggi kaku 350px agar tombol TIDAK TENGGELAM */
     .description {
-        height: auto !important;       /* Mengubah dari 350px menjadi otomatis */
-        min-height: auto !important;   /* Menghapus batasan tinggi minimum jika ada */
-        padding: 15px !important;      /* Sedikit mempersempit jarak dalam di HP */
+        height: auto !important;           /* Ubah dari 350px ke otomatis */
+        min-height: auto !important;       /* Bebaskan batas tinggi minimum */
+        padding: 20px !important;
         display: flex !important;
         flex-direction: column !important;
     }
 
-    /* 2. Pastikan item card pembungkusnya juga bisa melar ke bawah */
-    .data-item {
-        height: auto !important;       /* Memastikan card putih membungkus semua elemen di dalamnya */
-        margin-bottom: 10px !important;
+    /* 4. Sesuaikan font teks agar menghemat ruang di layar HP */
+    .description h3 { 
+        font-size: 20px !important;        /* Ukuran judul card di HP */
+        margin-bottom: 12px !important; 
+    } 
+
+    .description p {
+        font-size: 14px !important;        /* Ukuran teks paragraf di HP */
+        line-height: 1.5 !important;
+        margin-bottom: 20px !important;    /* Memberi jarak aman sebelum tombol */
     }
 
-    /* 3. Berikan jarak aman untuk tombol agar tidak menempel ketat dengan teks atasnya */
-    .read-more-btn, 
-    .description a, 
-    .description button {
-        margin-top: 15px !important;   /* Memberi ruang di atas tombol */
+    /* 5. Atur tombol "Baca Selengkapnya" agar naik dan terlihat jelas */
+    .read-more-btn {
+        margin-top: auto !important;       /* Otomatis nempel di bawah paragraf teks */
         display: block !important;
-        text-align: center !important;
-        width: 100% !important;        /* Membuat tombol melebar penuh di HP agar mudah ditekan */
+        width: 100% !important;            /* Membuat tombol lebar penuh di HP agar mudah ditap */
+        padding: 12px 0 !important;        /* Mempertebal tombol agar fingertip-friendly */
+        font-size: 14px !important;
         box-sizing: border-box !important;
     }
-}
 
+    /* 6. Perkecil sedikit gambar infografis atasnya agar seimbang */
+    .data-item img { 
+        width: 45% !important;             /* Ukuran gambar di HP */
+        margin: 15px auto 0 auto !important;
+    }
+}
 /* Penyesuaian Ekstrim jika dibuka di HP yang layarnya sangat kecil (Lebar < 480px) */
 @media (max-width: 480px) {
     .sesar-section .card { 
