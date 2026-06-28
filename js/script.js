@@ -543,6 +543,13 @@ legend.onAdd = function () {
 };
 legend.addTo(map);
 
+// Tambahkan kode ini setelah perintah legend.addTo(map);
+let legendElement = document.querySelector('.legend');
+
+// Cegah peta ikut bergeser/zooming saat boks legenda di-scroll atau disentuh
+L.DomEvent.disableScrollPropagation(legendElement);
+L.DomEvent.disableClickPropagation(legendElement);
+
 // Fungsi perantara untuk memilih jenis panduan bencana
 function pilihPanduan(jenis) {
     // 1. Tutup pop-up menu pilihan terlebih dahulu

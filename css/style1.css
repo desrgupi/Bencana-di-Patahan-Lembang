@@ -55,6 +55,40 @@ body {
     filter: drop-shadow(0px 3px 6px rgba(0,0,0,0.15)); /* Efek bayangan dipertegas */
 } 
 
+/* ==========================================================================
+   UKURAN STANDAR (UNTUK LAPTOP / DESKTOP)
+   ========================================================================== */
+.logo-img-upi, 
+.logo-img-geo {
+    height: 150px; /* Ukuran gagah saat dibuka di laptop */
+    width: auto;
+    filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.2));
+    transition: height 0.3s ease; /* Efek transisi halus saat layar berubah */
+}
+
+
+/* ==========================================================================
+   UKURAN RESPONSIF (GABUNGKAN DI DALAM @media max-width: 900px ANDA)
+   ========================================================================== */
+@media (max-width: 900px) {
+    
+    body {
+        /* Jarak atas disesuaikan karena logo di HP sekarang sudah mengecil */
+        padding-top: 240px !important; 
+    }
+
+    /* PAKSA LOGO MENGECIL DI HP */
+    .logo-img-upi, 
+    .logo-img-geo {
+        height: 55px !important; /* Sekarang dijamin mengecil jadi 55px di HP! */
+        width: auto !important;
+    }
+
+    /* Jarak antar logo dirapatkan sedikit agar manis di HP */
+    .logo-row-top {
+        gap: 15px !important;
+    }
+}
 /* --- 2. AREA JUDUL (TENGAH) --- */
 .title-area-center {
     position: absolute;
@@ -122,53 +156,23 @@ body {
     width: 100%; 
 }
 
-/* ==========================================================================
-   LAYOUT RESPONSIVE UNTUK HP (Lebar Layar di bawah 900px)
-   ========================================================================== */
 @media (max-width: 900px) {
-    body {
-        /* Disesuaikan kembali agar ruang pas dengan susunan navbar vertikal */
-        padding-top: 180px; 
-    }
-    
-    .container {
+    /* ... kode responsif Anda yang lain ... */
+
+    .navbar-main-row {
         flex-direction: column !important;
-        gap: 12px;
-        padding: 15px 20px;
+        gap: 12px !important;
+        
+        /* NETRALKAN MARGIN NEGATIF DI HP AGAR PAS DI TENGAH */
+        margin-top: 5px !important; 
+        padding-bottom: 5px !important;
     }
     
-    /* --- PERBAIKAN UTAMA: Navigasi & Judul Bertumpuk --- */
-    .logo-area-left, .title-area-center, .nav-area-right {
-        flex: none !important;
-        position: static !important;  /* MEMATIKAN position: absolute milik judul di HP */
-        transform: none !important;   /* Menghapus translasi koordinat desktop */
+    .title-area-left {
         width: 100% !important;
-        justify-content: center !important;
         text-align: center !important;
     }
-
-    .logo-area-left .logo-img {
-        height: 55px; /* Menjaga logo tetap proporsional dan ringkas */
-    }
-
-    .title-area-center h1 {
-        font-size: 18px !important; /* Memperkecil font judul di HP agar tidak pecah/patah */
-        line-height: 1.3;
-        color: #ffffff;
-    }
-
-    .nav-area-right ul {
-        display: flex;
-        flex-wrap: wrap; /* Mengizinkan menu turun baris secara rapi jika layar sangat sempit */
-        justify-content: center;
-        gap: 12px 20px; /* Jarak vertikal dan horizontal antar menu */
-    }
-
-    .nav-area-right ul li a {
-        font-size: 14px !important; /* Ukuran teks menu yang ramah sentuhan jari HP */
-        padding: 4px 0;
-    }
-
+}
     /* ==========================================================================
        TAMBAHAN: Perbaikan untuk Sesar Section (5 Card)
        ========================================================================== */
@@ -196,6 +200,43 @@ body {
         font-size: 12px !important;   /* Ukuran font teks diperkecil */
         line-height: 1.4 !important;
         word-wrap: break-word !important; /* Memaksa kata panjang patah ke bawah agar tidak keluar batas */
+    }
+
+    /* ==========================================================================
+   PERBAIKAN TOMBOL TENGGELAM PADA CARD BIASA (Di dalam @media max-width: 900px)
+   ========================================================================== */
+@media (max-width: 900px) {
+
+    /* --- Kode responsif navbar, legenda, dll yang sudah ada tetap biarkan --- */
+    /* ... */
+
+
+    /* --- KODE PERBAIKAN CARD NON-SLIDER --- */
+    
+    /* 1. Bebaskan tinggi kaku area deskripsi */
+    .description {
+        height: auto !important;       /* Mengubah dari 350px menjadi otomatis */
+        min-height: auto !important;   /* Menghapus batasan tinggi minimum jika ada */
+        padding: 15px !important;      /* Sedikit mempersempit jarak dalam di HP */
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    /* 2. Pastikan item card pembungkusnya juga bisa melar ke bawah */
+    .data-item {
+        height: auto !important;       /* Memastikan card putih membungkus semua elemen di dalamnya */
+        margin-bottom: 10px !important;
+    }
+
+    /* 3. Berikan jarak aman untuk tombol agar tidak menempel ketat dengan teks atasnya */
+    .read-more-btn, 
+    .description a, 
+    .description button {
+        margin-top: 15px !important;   /* Memberi ruang di atas tombol */
+        display: block !important;
+        text-align: center !important;
+        width: 100% !important;        /* Membuat tombol melebar penuh di HP agar mudah ditekan */
+        box-sizing: border-box !important;
     }
 }
 
@@ -498,14 +539,15 @@ body {
 
     /* --- KODE BARU: OPTIMALISASI LEGENDA LEAFLET DI HP --- */
     .legend {
-        max-width: 180px !important;    /* Batasi lebar maksimal legenda di HP */
-        max-height: 220px !important;   /* Batasi tinggi maksimal agar tidak penuh */
-        overflow-y: auto !important;    /* Aktifkan scrollbar vertikal jika teks panjang */
-        padding: 8px 12px !important;   /* Persempit jarak bagian dalam boks */
-        font-size: 11px !important;     /* Perkecil ukuran huruf teks biasa */
-        line-height: 1.4 !important;    /* Rapatkan jarak antar baris */
-        background: rgba(255, 255, 255, 0.95) !important; /* Buat sedikit transparan agar estetik */
-    }
+    max-width: 180px !important;    
+    max-height: 200px !important;   
+    overflow-y: scroll !important;  /* Dipaksa menggunakan scroll */
+    -webkit-overflow-scrolling: touch !important; /* Membuat scroll di HP halus/smooth */
+    padding: 8px 12px !important;   
+    font-size: 11px !important;     
+    line-height: 1.4 !important;    
+    touch-action: auto !important;  /* Mengizinkan aksi sentuh khusus elemen ini */
+}
 
     /* Perkecil Judul Utama "Legenda Peta" */
     .legend p[style*="font-size: 18px"] {

@@ -125,7 +125,7 @@
     background-color: #305466;
   }
 
-  @media (max-width: 768px) {
+@media (max-width: 900px) {
     .custom-card-slider {
       flex: 0 0 100%;
     }
@@ -164,38 +164,44 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 
 <body> 
 <header id="navbar"> 
-    <div class="container"> 
+    <div class="container" style="flex-direction: column; align-items: center; gap: 15px;"> 
         
-        <div class="logo-area-left"> 
-            <img src="assets/LogoUpi.jpg" alt="Logo UPI" class="logo-img"> 
-            <img src="assets/Logo Geografi.png" alt="Logo Pendidikan Geografi" class="logo-img"> 
-        </div> 
+        <div class="logo-row-top" style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 30px; padding-bottom: 5px;">
+    
+    <img src="assets/LogoUpi.jpg" alt="Logo UPI" class="logo-img-upi"> 
+    
+    <img src="assets/Logo Geografi.png" alt="Logo Pendidikan Geografi" class="logo-img-geo"> 
 
-        <div class="title-area-center">
-            <h1 style="color: #ffffff; font-family: Tahoma; margin: 0;">Bencana di Patahan Lembang</h1> 
-            <p style="color: #f3ebd9; margin: 2px 0 0 0; font-size: 12px; font-family: Tahoma;">Pendidikan Geografi FPIPS UPI</p>
+</div>
+
+        <div class="navbar-main-row" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: -25px; padding-bottom: 10px;">
+            
+            <div class="title-area-left" style="flex: 2; text-align: left;">
+                <h1 style="color: #ffffff; font-family: Tahoma; margin: 0; font-size: 26px; font-weight: bold;">Bencana di Patahan Lembang</h1> 
+                <p style="color: #f3ebd9; margin: 2px 0 0 0; font-size: 13px; font-family: Tahoma;">Pendidikan Geografi FPIPS UPI</p>
+            </div>
+            
+            <nav class="nav-area-right" style="flex: 1; display: flex; justify-content: flex-end; align-items: center;"> 
+                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 35px;"> 
+                    <li>
+                        <a href="#hero-section" style="color: #ffffff; text-decoration: none; display: flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-house"></i> Beranda
+                        </a>
+                    </li> 
+                    <li>
+                        <a href="#sesar-section" style="color: #ffffff; text-decoration: none; display: flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-mountain"></i> Tinjauan Wilayah
+                        </a>
+                    </li> 
+                    <li>
+                        <a href="#map-section" style="color: #ffffff; text-decoration: none; display: flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-map"></i> Peta Bencana
+                        </a>
+                    </li>   
+                </ul> 
+            </nav>
+
         </div>
-        
-        <nav class="nav-area-right"> 
-            <ul> 
-                <li>
-                    <a href="#hero-section">
-                        <i class="fa-solid fa-house"></i> Beranda
-                    </a>
-                </li> 
-                <li>
-                    <a href="#sesar-section">
-                        <i class="fa-solid fa-mountain"></i> Tinjauan Wilayah
-                    </a>
-                </li> 
-                <li>
-                    <a href="#map-section">
-                        <i class="fa-solid fa-map"></i> Peta Bencana
-                    </a>
-                </li>   
-            </ul> 
-        </nav>
-
     </div>
 </header>
 
