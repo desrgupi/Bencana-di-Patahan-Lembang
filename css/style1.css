@@ -203,77 +203,100 @@ body {
     }
 
  /* ==========================================================================
-   PERBAIKAN TOTAL SESAR SECTION (Ganti kode sesar di dalam @media 900px Anda)
+   PERBAIKAN TOTAL LAYOUT PIRAMIDA SESAR SECTION DI HP
+   (Masukkan di dalam @media max-width: 900px)
    ========================================================================== */
 @media (max-width: 900px) {
 
-    /* 1. Paksa container agar mau menurunkan card ke bawah (tidak memanjang ke samping) */
+    /* 1. PAKSA CONTAINER UNTUK MENGAKTIFKAN WRAP (PATAH BARIS) */
     #sesar-section .container { 
         display: flex !important;
-        flex-direction: column !important; /* Susun card vertikal ke bawah di HP */
-        align-items: center !important;
-        gap: 25px !important;              /* Memberi jarak antar boks card */
-        padding: 0 15px !important;
-    }
-
-    /* 2. Setel ulang lebar kolom agar memenuhi layar HP */
-    .column { 
-        flex: 1 1 100% !important; 
+        flex-direction: row !important; 
+        flex-wrap: wrap !important;       /* KUNCI UTAMA: mengizinkan card turun baris */
+        overflow-x: visible !important;   /* Matikan scroll menyamping */
+        justify-content: center !important; 
+        gap: 20px 15px !important;              
+        padding: 0 15px 10px 15px !important; 
         width: 100% !important;
-        max-width: 450px !important;       /* Membatasi lebar di HP agar tidak terlalu melar */
-        margin-bottom: 0 !important;       /* Reset margin desktop */
-    } 
-
-    .data-item {
-        margin: 0 !important;
-        height: 100% !important;
-        overflow: visible !important;      /* Pastikan tidak memotong elemen di dalamnya */
     }
 
-    /* 3. KUNCI UTAMA: Bebaskan tinggi kaku 350px agar tombol TIDAK TENGGELAM */
-    .description {
-        height: auto !important;           /* Ubah dari 350px ke otomatis */
-        min-height: auto !important;       /* Bebaskan batas tinggi minimum */
-        padding: 20px !important;
+    /* === BARIS 1: CARD PERTAMA (SEJARAH) MELEBAR PENUH DI ATAS === */
+    #sesar-section .container .column:flex-first,
+    #sesar-section .container .column:first-child {
+        flex: 0 0 100% !important;        /* Lebar 100% penuh */
+        max-width: 100% !important;
+        width: 100% !important;
+        margin-bottom: 5px !important;
+    }
+
+    /* === BARIS 2: CARD KEDUA & KETIGA SEJAJAR BERDUA DI BAWAH === */
+    #sesar-section .container .column:not(:first-child) {
+        flex: 0 0 calc(50% - 10px) !important; /* Bagi dua rata kanan-kiri */
+        width: calc(50% - 10px) !important;
+        min-width: 140px !important;    
+    }
+
+    /* === SAMAKAN STRUKTUR PADA 2 CARD SLIDER ATASNYA === */
+    .slider-wrapper {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        flex-direction: row !important;
+        justify-content: center !important; 
+        gap: 15px !important;
+        width: 100% !important;
+    }
+
+    .custom-card-slider {
+        flex: 0 0 calc(50% - 10px) !important; 
+        width: calc(50% - 10px) !important;
+        min-width: 140px !important;
+        margin: 0 !important;
+    }
+
+    /* === PENYELAMAT TEKS TENGGELAM (SEMUA CARD) === */
+    .description, 
+    .custom-card-slider {
+        height: auto !important;         /* Matikan gembok 350px */
+        min-height: 350px !important;    /* Tinggi minimal untuk baris ke-2 agar sejajar */
         display: flex !important;
         flex-direction: column !important;
+        padding: 15px !important;        
     }
 
-    /* 4. Sesuaikan font teks agar menghemat ruang di layar HP */
-    .description h3 { 
-        font-size: 20px !important;        /* Ukuran judul card di HP */
-        margin-bottom: 12px !important; 
-    } 
-
-    .description p {
-        font-size: 14px !important;        /* Ukuran teks paragraf di HP */
-        line-height: 1.5 !important;
-        margin-bottom: 20px !important;    /* Memberi jarak aman sebelum tombol */
+    /* Card sejarah tidak perlu min-height tinggi karena sudah lebar */
+    #sesar-section .container .column:first-child .description {
+        min-height: auto !important;
     }
 
-    /* 5. Atur tombol "Baca Selengkapnya" agar naik dan terlihat jelas */
-    .read-more-btn {
-        margin-top: auto !important;       /* Otomatis nempel di bawah paragraf teks */
+    .description p,
+    .custom-card-slider p {
+        flex-grow: 1 !important;         /* Dorong tombol ke dasar boks */
+        font-size: 13px !important;       
+        line-height: 1.4 !important;
+        margin-bottom: 15px !important;
+    }
+
+    .description h3,
+    .custom-card-slider h3 {
+        font-size: 16px !important;       
+        margin-bottom: 8px !important;
+    }
+
+    .read-more-btn,
+    .btn-slider {
+        margin-top: auto !important;     
+        width: 100% !important;
         display: block !important;
-        width: 100% !important;            /* Membuat tombol lebar penuh di HP agar mudah ditap */
-        padding: 12px 0 !important;        /* Mempertebal tombol agar fingertip-friendly */
-        font-size: 14px !important;
-        box-sizing: border-box !important;
+        text-align: center !important;
+        font-size: 12px !important;
+        padding: 10px 0 !important;
     }
 
-    /* 6. Perkecil sedikit gambar infografis atasnya agar seimbang */
-    .data-item img { 
-        width: 45% !important;             /* Ukuran gambar di HP */
+    .data-item img {
+        width: 35% !important;            
         margin: 15px auto 0 auto !important;
     }
 }
-/* Penyesuaian Ekstrim jika dibuka di HP yang layarnya sangat kecil (Lebar < 480px) */
-@media (max-width: 480px) {
-    .sesar-section .card { 
-        width: 100% !important; /* Ubah menjadi 1 card penuh per baris agar teks leluasa */
-    }
-}
-
 /* SECTION 1 */
 #hero-section {
     height: 100vh; /* 1 layar penuh */
