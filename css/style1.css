@@ -122,26 +122,87 @@ body {
     width: 100%; 
 }
 
-/* LAYOUT RESPONSIVE UNTUK HP */
+/* ==========================================================================
+   LAYOUT RESPONSIVE UNTUK HP (Lebar Layar di bawah 900px)
+   ========================================================================== */
 @media (max-width: 900px) {
     body {
-        padding-top: 260px; 
+        /* Disesuaikan kembali agar ruang pas dengan susunan navbar vertikal */
+        padding-top: 180px; 
     }
+    
     .container {
-        flex-direction: column;
-        gap: 15px;
+        flex-direction: column !important;
+        gap: 12px;
         padding: 15px 20px;
     }
+    
+    /* --- PERBAIKAN UTAMA: Navigasi & Judul Bertumpuk --- */
     .logo-area-left, .title-area-center, .nav-area-right {
-        flex: none;
-        justify-content: center;
-        text-align: center;
+        flex: none !important;
+        position: static !important;  /* MEMATIKAN position: absolute milik judul di HP */
+        transform: none !important;   /* Menghapus translasi koordinat desktop */
+        width: 100% !important;
+        justify-content: center !important;
+        text-align: center !important;
     }
+
     .logo-area-left .logo-img {
-        height: 60px; /* Saat di HP ukuran diturunkan sedikit agar tidak memakan ruang layar */
+        height: 55px; /* Menjaga logo tetap proporsional dan ringkas */
     }
+
+    .title-area-center h1 {
+        font-size: 18px !important; /* Memperkecil font judul di HP agar tidak pecah/patah */
+        line-height: 1.3;
+        color: #ffffff;
+    }
+
     .nav-area-right ul {
-        gap: 15px;
+        display: flex;
+        flex-wrap: wrap; /* Mengizinkan menu turun baris secara rapi jika layar sangat sempit */
+        justify-content: center;
+        gap: 12px 20px; /* Jarak vertikal dan horizontal antar menu */
+    }
+
+    .nav-area-right ul li a {
+        font-size: 14px !important; /* Ukuran teks menu yang ramah sentuhan jari HP */
+        padding: 4px 0;
+    }
+
+    /* ==========================================================================
+       TAMBAHAN: Perbaikan untuk Sesar Section (5 Card)
+       ========================================================================== */
+    /* Ganti '.sesar-container' dan '.card-sesar' sesuai nama class HTML Anda */
+    .sesar-section-container, 
+    .sesar-section .container-card { 
+        display: flex !important;
+        flex-wrap: wrap !important;   /* MEMAKSA card ke-5 turun ke bawah, tidak hilang */
+        justify-content: center !important;
+        gap: 15px !important;
+        padding: 10px !important;
+    }
+
+    .sesar-section .card, 
+    .custom-card-sesar { 
+        /* Di HP: Menampilkan 2 card per baris (lebar ~45%). Card ke-5 otomatis rata tengah di bawah */
+        width: calc(50% - 15px) !important; 
+        min-width: 140px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Merapikan teks di dalam card agar muat sempurna */
+    .sesar-section .card h3,
+    .sesar-section .card p {
+        font-size: 12px !important;   /* Ukuran font teks diperkecil */
+        line-height: 1.4 !important;
+        word-wrap: break-word !important; /* Memaksa kata panjang patah ke bawah agar tidak keluar batas */
+    }
+}
+
+/* Penyesuaian Ekstrim jika dibuka di HP yang layarnya sangat kecil (Lebar < 480px) */
+@media (max-width: 480px) {
+    .sesar-section .card { 
+        width: 100% !important; /* Ubah menjadi 1 card penuh per baris agar teks leluasa */
     }
 }
 
@@ -303,22 +364,188 @@ body {
     border-radius: 10px 10px 0 0; 
 } 
 
-/* Style standar untuk Laptop/PC */
-.legend {
-    max-height: 400px;
-    overflow-y: auto;
-}
+/* ==========================================================================
+   BAGIAN BAWAH FILE CSS ANDA (GABUNGAN NAVBAR & SESAR SECTION)
+   ========================================================================== */
 
-/* Penyesuaian khusus untuk layar HP (lebar di bawah 768px) */
-@media (max-width: 768px) {
-    .legend {
-        max-width: 200px;
-        max-height: 250px; /* Batasi tinggi agar tidak penuh */
-        font-size: 11px;    /* Perkecil ukuran font sedikit */
-        padding: 8px;
+@media (max-width: 900px) {
+    /* --- Kode Responsif Navbar yang Sudah Anda Miliki --- */
+    body {
+        padding-top: 180px; 
     }
-    
-    .legend p {
-        font-size: 12px !important; /* Perkecil judul bagian */
+    .container {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px 20px;
+    }
+    .logo-area-left, .title-area-center, .nav-area-right {
+        flex: none !important;
+        position: static !important;  /* Mematikan absolute judul di HP */
+        transform: none !important;
+        width: 100% !important;
+        justify-content: center;
+        text-align: center;
+    }
+    .logo-area-left .logo-img {
+        height: 55px; 
+    }
+    .title-area-center h1 {
+        font-size: 18px !important;
+        line-height: 1.3;
+    }
+    .nav-area-right ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px 20px;
+    }
+    .nav-area-right ul li a {
+        font-size: 14px !important;
+    }
+
+    /* --- MASUKKAN KODE SESAR SECTION DI SINI (Di dalam tanda kurung kurawal max-width 900px) --- 
+    */
+    #sesar-section .container { 
+        display: flex !important;
+        flex-wrap: wrap !important;   /* Memaksa card sisa turun ke bawah */
+        gap: 20px !important;         
+        padding: 0 15px !important;
+    }
+
+    #sesar-section h2 { 
+        font-size: 26px !important; 
+        margin-bottom: 25px !important; 
+    }
+
+    .column { 
+        flex: 1 1 calc(50% - 20px) !important; /* Tampilkan 2 card per baris di tablet/HP wide */
+        max-width: 100% !important; 
+        margin-bottom: 20px !important; 
+    } 
+
+    .description {
+        height: auto !important;       /* Membebaskan tinggi kaku 350px agar teks tidak tumpat */
+        min-height: 280px;            
+        padding: 15px !important;
+    }
+
+    .description h3 { 
+        font-size: 18px !important;   
+        margin-bottom: 10px !important;
+    } 
+
+    .description p {
+        font-size: 14px !important;   
+    }
+
+    .data-item img { 
+        width: 40% !important;        
+        margin: 15px auto 0 auto !important;
+    }
+} /* <--- TANDA KURUNG KURAWAL INI ADALAH PENUTUP SELURUH ATURAN @MEDIA (MAX-WIDTH: 900px) */
+
+
+/* ==========================================================================
+   LAYOUT RESPONSIVE UNTUK SLIDER CARD (Masukkan di dalam @media max-width: 900px)
+   ========================================================================== */
+@media (max-width: 900px) {
+
+    /* 1. Bebaskan container agar tidak memotong card yang meluap */
+    .slider-container {
+        overflow: visible !important;
+        width: 100% !important;
+        padding: 0 10px !important;
+        box-sizing: border-box;
+    }
+
+    /* 2. Paksa wrapper yang tadinya memanjang ke samping menjadi turun ke bawah */
+    .slider-wrapper {
+        display: flex !important;
+        flex-direction: column !important; /* Susun card vertikal ke bawah */
+        transform: none !important;        /* Matikan efek geser/animasi slider di HP */
+        gap: 20px !important;              /* Beri jarak antar card agar tidak menempel */
+        width: 100% !important;
+    }
+
+    /* 3. Atur lebar card agar pas dengan layar HP */
+    .custom-card-slider {
+        width: 100% !important;            /* Lebar penuh memenuhi layar HP */
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;              /* Reset margin bawaan slider */
+    }
+
+    /* 4. Sesuaikan teks di dalam card slider agar proporsional di HP */
+    .custom-card-slider h3 {
+        font-size: 18px !important;
+        margin: 10px 0 !important;
+    }
+
+    .custom-card-slider p {
+        font-size: 14px !important;
+        line-height: 1.4 !important;
+        margin-bottom: 15px !important;
+    }
+}
+/* ==========================================================================
+   MENGECILKAN LEGENDA LEAFLET DI HP (Masukkan di dalam @media max-width: 900px)
+   ========================================================================== */
+@media (max-width: 900px) {
+
+    /* --- Kode Responsif Navbar, Sesar, & Slider yang Sudah Ada (Tetap Pertahankan) --- */
+    /* ... */
+
+
+    /* --- KODE BARU: OPTIMALISASI LEGENDA LEAFLET DI HP --- */
+    .legend {
+        max-width: 180px !important;    /* Batasi lebar maksimal legenda di HP */
+        max-height: 220px !important;   /* Batasi tinggi maksimal agar tidak penuh */
+        overflow-y: auto !important;    /* Aktifkan scrollbar vertikal jika teks panjang */
+        padding: 8px 12px !important;   /* Persempit jarak bagian dalam boks */
+        font-size: 11px !important;     /* Perkecil ukuran huruf teks biasa */
+        line-height: 1.4 !important;    /* Rapatkan jarak antar baris */
+        background: rgba(255, 255, 255, 0.95) !important; /* Buat sedikit transparan agar estetik */
+    }
+
+    /* Perkecil Judul Utama "Legenda Peta" */
+    .legend p[style*="font-size: 18px"] {
+        font-size: 13px !important;     
+        margin-bottom: 5px !important;
+        margin-top: 0 !important;
+    }
+
+    /* Perkecil Judul Sub-Bagian (Administrasi, Struktur, Jalur, dll.) */
+    .legend p[style*="font-size: 13px"] {
+        font-size: 11px !important;     
+        margin-top: 10px !important;
+        margin-bottom: 4px !important;
+        padding-bottom: 2px !important;
+    }
+
+    /* Sesuaikan ukuran kotak warna/simbol di legenda agar seimbang */
+    .legend div[style*="height: 12px"] {
+        height: 10px !important;
+        width: 16px !important;
+        margin-right: 6px !important;
+    }
+
+    /* Sesuaikan ukuran gambar ikon (Fasilitas Pendidikan, dll.) agar ikut mengecil */
+    .legend img {
+        height: 13px !important;
+        width: 13px !important;
+        margin-right: 8px !important;
+    }
+
+    /* Sesuaikan ukuran ikon silang custom (Titik Bahaya) di legenda */
+    .legend-cross-container {
+        width: 13px !important;
+        height: 13px !important;
+        margin-right: 8px !important;
+    }
+    .legend-cross-line.vertical {
+        left: 6px !important; /* Tengahkan kembali garis vertikal (13px / 2) */
+    }
+    .legend-cross-line.horizontal {
+        top: 6px !important;  /* Tengahkan kembali garis horizontal (13px / 2) */
     }
 }
