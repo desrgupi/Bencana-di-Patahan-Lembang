@@ -1,32 +1,27 @@
 /* Style Kerangka Secara Umum */ 
-    html { 
+html { 
     scroll-behavior: smooth; 
     font-family: sans-serif; 
     caret-color: transparent; 
-    } 
-    body { 
+} 
+
+body { 
     font-family: sans-serif; 
     margin: 0; 
     padding: 0; 
-    } 
-    /* Seluruh Komponen Pada Header */ 
-    .logo { 
-    display: flex; /* Use flexbox */ 
-    align-items: center; /* Align items vertically */ 
-     gap: 10px; 
-    } 
-    .logo img { 
-    width: 80px; /* Set the width of the logo */ 
-    margin-right: 10px; /* Add some space between the image and 
-title */ 
-    } 
-    
-    #navbar { 
-    background-color: #997e67; 
-    color: #333; 
-    padding: 10px 0; 
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); 
-    position: fixed; 
+    /* DIUBAH: Ditambah jaraknya agar Hero Section di bawahnya tidak terpotong 
+       karena ukuran header baru sekarang lebih tinggi dan besar */
+    padding-top: 50px; 
+} 
+
+/* Seluruh Komponen Pada Header */ 
+#navbar { 
+    background-color: #678d99; /* Warna biru khas kamu */
+    color: #ffffff; 
+    /* DIUBAH: Padding atas-bawah dinaikkan dari 10px menjadi 15px agar ruang header lebih lega */
+    padding: 2px 0; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); 
+    position: relative; 
     top: 0; 
     left: 0; 
     right: 0; 
@@ -34,37 +29,81 @@ title */
     font-family: 'Montserrat', sans-serif; 
     transition: background-color 0.3s ease; 
 } 
- 
+
 .container { 
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
     max-width: none; 
     margin: 0 auto; 
-    padding: 0 30px; 
+    padding: 0 40px; /* Sedikit diperlebar ruang kirinya */
 } 
- 
-nav ul { 
+
+/* --- 1. AREA LOGO (KIRI) --- */
+.logo-area-left { 
+    flex: 1;
+    display: flex; 
+    align-items: center; 
+    gap: 10px; /* Jarak antar-logo diperlebar agar seimbang dengan ukuran barunya */
+    justify-content: flex-start;
+} 
+
+/* DIUBAH: Ukuran kedua logo diperbesar secara signifikan */
+.logo-area-left .logo-img { 
+    height: 150px; /* Tinggi dinaikkan dari 55px menjadi 75px agar terlihat gagah dan jelas */
+    width: auto;  
+    filter: drop-shadow(0px 3px 6px rgba(0,0,0,0.15)); /* Efek bayangan dipertegas */
+} 
+
+/* --- 2. AREA JUDUL (TENGAH) --- */
+.title-area-center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: auto;
+    z-index: 10; /* Memastikan judul tidak tertindih komponen lain */
+}
+
+.title-area-center h1 {
+    font-size: 26px; 
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    margin: 0;
+}
+
+/* --- 3. AREA MENU NAVIGASI (KANAN) --- */
+.nav-area-right {
+    flex: 2;
+    display: flex;
+    justify-content: flex-end; 
+}
+
+.nav-area-right ul { 
     list-style: none; 
     margin: 0; 
     padding: 0; 
     display: flex; 
-    gap: 30px; 
+    gap: 35px; /* Jarak antar-pilihan menu disesuaikan sedikit lebih renggang */
 } 
  
- 
-nav ul li a { 
+.nav-area-right ul li a { 
     text-decoration: none; 
-    font-size: 16px; 
+    font-size: 17px; /* Ukuran font menu dinaikkan tipis agar terbaca jelas */
     font-weight: 500; 
     color: #ffffff; 
     position: relative; 
     padding: 5px 0; 
+    display: flex;
+    align-items: center;
+    gap: 8px; 
     transition: color 0.3s ease; 
     margin-right: 6px;
 } 
  
-nav ul li a::after { 
+/* Efek Animasi Garis Bawah Putih Kreatif */
+.nav-area-right ul li a::after { 
     content: ""; 
     position: absolute; 
     left: 0; 
@@ -75,13 +114,35 @@ nav ul li a::after {
     transition: width 0.3s ease-in-out; 
 } 
  
-nav ul li a:hover { 
+.nav-area-right ul li a:hover { 
     color: #ffffff; 
 } 
  
-nav ul li a:hover::after { 
+.nav-area-right ul li a:hover::after { 
     width: 100%; 
- 
+}
+
+/* LAYOUT RESPONSIVE UNTUK HP */
+@media (max-width: 900px) {
+    body {
+        padding-top: 260px; 
+    }
+    .container {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px 20px;
+    }
+    .logo-area-left, .title-area-center, .nav-area-right {
+        flex: none;
+        justify-content: center;
+        text-align: center;
+    }
+    .logo-area-left .logo-img {
+        height: 60px; /* Saat di HP ukuran diturunkan sedikit agar tidak memakan ruang layar */
+    }
+    .nav-area-right ul {
+        gap: 15px;
+    }
 }
 
 /* SECTION 1 */
@@ -95,19 +156,23 @@ nav ul li a:hover::after {
     background-position: center;
 }
 
+.h1 {
+    color: #305466;
+}
+
 /* SECTION 2 */
 
 #map {
     width: 80%;
     height: 900px;
     background-color: lightgray;
-    border: 5px solid #664930; /* garis tepi */
+    border: 5px solid #305466; /* garis tepi */
     border-radius: 20px;       /* sudut melengkung */
     box-shadow: 0 4px 10px rgba(0,0,0,0.2); /* bayangan */
 }
 
 .read-more-btn {
-    background-color: #997e67;
+    background-color: #678d99;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -166,15 +231,16 @@ nav ul li a:hover::after {
 
     font-size: 32px;
     cursor: pointer;
-    color: #997e67;
+    color: #678d99;
 }
 
 /* Data Section Styles */ 
 #sesar-section { 
-    background-color: ""; 
+    /* Gradasi dari biru teks versi transparan ke warna yang sedikit lebih gelap */
+    background: linear-gradient(135deg, rgba(120, 175, 205, 0.15), rgba(206, 220, 225, 0.4)); 
     padding: 60px 0; 
-    color: #997e67; 
-} 
+    color: #305466; 
+}
 #sesar-section .container { 
     max-width: 1500px; 
     margin: 0 auto; 
@@ -217,12 +283,12 @@ nav ul li a:hover::after {
     margin-top: 0; 
     font-size: 24px; 
     text-align: center; 
-    color: #997e67; 
+    color: #305466; 
 } 
 
 .description p {
     flex-grow: 1;
-     color: #997e67; 
+     color: #678d99; 
     font-size: 16px; 
 }
 
@@ -236,3 +302,23 @@ nav ul li a:hover::after {
     height: auto; 
     border-radius: 10px 10px 0 0; 
 } 
+
+/* Style standar untuk Laptop/PC */
+.legend {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* Penyesuaian khusus untuk layar HP (lebar di bawah 768px) */
+@media (max-width: 768px) {
+    .legend {
+        max-width: 200px;
+        max-height: 250px; /* Batasi tinggi agar tidak penuh */
+        font-size: 11px;    /* Perkecil ukuran font sedikit */
+        padding: 8px;
+    }
+    
+    .legend p {
+        font-size: 12px !important; /* Perkecil judul bagian */
+    }
+}
