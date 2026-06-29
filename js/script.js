@@ -583,7 +583,7 @@ $.getJSON("assets/data-spasial/kantor.geojson", function (KantorData) {
         
         onEachFeature: function(feature, layer) {
             let properti = feature.properties;
-            let namaKantor = properti["Nama"] || properti["NAMOBJ"] || "Kantor Desa Cihanjuang";
+            let namaKantor = properti["Nama"] || properti["NAMOBJ"] || "Kantor Desa Cihanjuangrahayu";
             
             let koordinat = layer.getLatLng();
             let lat = koordinat.lat;
@@ -662,7 +662,7 @@ legend.onAdd = function () {
     // KODE BARU: Polos tanpa box pembungkus luar
     '<i class="fa-solid fa-location-pin" style="font-size: 20px; color: #1e3d59; display: inline-block; margin-right: 12px; vertical-align: middle; position: relative;">' +
         '<i class="fa-solid fa-building-flag" style="font-size: 7px; color: #ffffff; position: absolute; top: 4px; left: 50%; transform: translateX(-50%); font-family: \'Font Awesome 6 Free\'; font-weight: 900;"></i>' +
-    '</i>Kantor Desa Cihanjuang<br>' +
+    '</i>Kantor Desa Cihanjuangrahayu<br>' +
     
     // === SEKARANG DI SINI: Titik Evakuasi / Shelter ===
     '<p style="font-size: 13px; font-weight: bold; margin-bottom: 5px; margin-top: 15px; border-bottom: 1px solid #ccc; padding-bottom: 3px;">Titik Evakuasi (Shelter)</p>' +
