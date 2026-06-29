@@ -188,9 +188,11 @@ function dapatkanWarnaJalur(teks) {
 // 2. PROSES KOLEKTIF DATA: MITIGASI GEMPA BUMI
 // =========================================================================
 
-// A. Poligon Tingkat Bahaya Gempa Bumi (Ditempatkan di poligonPane)
-$.getJSON("assets/data-spasial/Gempa_Bumi.geojson", function (Bahaya) {
-    L.geoJson(Bahaya, {
+// =========================================================================
+// A1. Poligon Tingkat Bahaya Gempa Bumi - KECAMATAN (Ditempatkan di poligonPane)
+// =========================================================================
+$.getJSON("assets/data-spasial/Gempa_Erase.geojson", function (BahayaKec) {
+    L.geoJson(BahayaKec, {
         style: function(feature) {
             let colorMap = {
                 'Sangat Rendah': "#5db45a",
@@ -202,19 +204,56 @@ $.getJSON("assets/data-spasial/Gempa_Bumi.geojson", function (Bahaya) {
             let warna = colorMap[feature.properties.Bahaya] || "#ffffff";
             return { 
                 fillColor: warna, 
-                fillOpacity: 1, 
+                fillOpacity: 0.5,        // Opacity disesuaikan agar layer base map tetap proporsional
                 weight: 1, 
-                color: warna,
+                weightOpacity: 0.5,
+                color: colorMap,         // Garis batas putih tipis antar zona
                 pane: 'poligonPane' 
             };
         },
         onEachFeature: function (feature, layer) {
-            layer.bindPopup('<b>Tingkat Bahaya Gempa:</b> ' + feature.properties.Bahaya);
+            layer.bindPopup('<b>Tingkat Bahaya Gempa (Kecamatan):</b> ' + feature.properties.Bahaya);
         }
     }).addTo(Grup_Gempa_Bumi);
 });
 
+// =========================================================================
+// A2. Poligon Tingkat Bahaya Gempa Bumi - KHUSUS DESA CIHANJUANG
+// =========================================================================
+// Menggunakan data spasial detail gempa mikro untuk Cihanjuang
+$.getJSON("assets/data-spasial/Gempa_Desa.geojson", function (BahayaDesa) {
+    L.geoJson(BahayaDesa, {
+        style: function(feature) {
+            let colorMap = {
+                'Sangat Rendah': "#5db45a",
+                'Rendah': "#98d3a7",
+                'Sedang': "#f1cd8b",
+                'Tinggi': "#eb6868",
+                'Sangat Tinggi': "#c64c4c"
+            };
+            let warna = colorMap[feature.properties.Bahaya] || "#ffffff";
+            return { 
+                fillColor: warna, 
+                fillOpacity: 1,       // Sedikit lebih pekat untuk penanda fokus desa
+                weight: 1, 
+                color: colorMap,        // Outline penegas khusus terluar zona Cihanjuang
+                pane: 'poligonPane' 
+            };
+        },
+        onEachFeature: function (feature, layer) {
+            let properti = feature.properties;
+            let namaDesa = properti["NAMOBJ"] || "Cihanjuang";
+            layer.bindPopup(`
+                <b>Wilayah Fokus:</b> Desa ${namaDesa}<br>
+                <b>Tingkat Bahaya Gempa Detail:</b> <span style="color:#c64c4c; font-weight:bold;">${properti.Bahaya}</span>
+            `);
+        }
+    }).addTo(Grup_Gempa_Bumi);
+});
+
+// =========================================================================
 // B. Titik Bahaya Gempa Bumi (Tanda Silang Hitam ArcGIS)
+// =========================================================================
 $.getJSON("assets/data-spasial/Titik_Bahaya_GempaBumi.geojson", function (Kode) {
     L.geoJson(Kode, {
         pointToLayer: function(feature, latlng) {
@@ -232,7 +271,9 @@ $.getJSON("assets/data-spasial/Titik_Bahaya_GempaBumi.geojson", function (Kode) 
     }).addTo(Grup_Gempa_Bumi);
 });
 
-// C. Titik Shelter Gempa Bumi (IKON BERUBAH SEBARAN 5 JENIS BANGUNAN + POPUP DETAIL)
+// =========================================================================
+// C. Titik Shelter Gempa Bumi (IKON BERUBAH SEBARAN 5 JENIS BANGUNAN)
+// =========================================================================
 $.getJSON("assets/data-spasial/Shelter_GempaBumi.geojson", function (DataShelter) {
     L.geoJson(DataShelter, {
         pointToLayer: function(feature, latlng) {
@@ -258,15 +299,13 @@ $.getJSON("assets/data-spasial/Shelter_GempaBumi.geojson", function (DataShelter
             let jenisBangunan = feature.properties.titik_aman_Gempa || "Fasilitas Umum";
             let kodeShelter = feature.properties.Kode || "-";
 
-            // 1. Ekstrak koordinat secara aman dari layer Leaflet
             let koordinat = layer.getLatLng();
             let lat = koordinat.lat;
             let lng = koordinat.lng;
+            
+            // Format link rute navigasi Google Maps resmi
+            let googleMapsUrl = "https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lng;
 
-            // 2. Susun URL pencarian Google Maps berbasis koordinat
-            let googleMapsUrl = "https://www.google.com/maps/search/?api=1&query=" + lat + "," + lng;
-
-            // 3. Bind Popup dengan tombol penunjuk arah
             layer.bindPopup(`
                 <div style="font-family: 'Montserrat', sans-serif; min-width: 200px;">
                     <h4 style="margin: 0 0 4px 0; color: #678d99; font-size: 14px;">${namaBangunan}</h4>
@@ -283,13 +322,15 @@ $.getJSON("assets/data-spasial/Shelter_GempaBumi.geojson", function (DataShelter
     }).addTo(Grup_Gempa_Bumi);
 });
 
+// =========================================================================
 // D. Jalur Evakuasi Gempa Bumi (Ditempatkan di jalurPane)
+// =========================================================================
 $.getJSON("assets/data-spasial/Jalur_Evakuasi_GempaBumi.geojson", function (Estimasi) {
     L.geoJson(Estimasi, {
         style: function(feature) {
             return {
                 color: dapatkanWarnaJalur(feature.properties.Estimasi),
-                weight: 5, 
+                weight: 2, 
                 opacity: 1.0, 
                 lineCap: 'round',
                 lineJoin: 'round',
@@ -302,14 +343,11 @@ $.getJSON("assets/data-spasial/Jalur_Evakuasi_GempaBumi.geojson", function (Esti
     }).addTo(Grup_Gempa_Bumi);
 });
 
-
 // =========================================================================
-// 3. PROSES KOLEKTIF DATA: MITIGASI LONGSOR
+// A1. Poligon Tingkat Bahaya Longsor - KECAMATAN (Ditempatkan di poligonPane)
 // =========================================================================
-
-// A. Poligon Tingkat Bahaya Longsor (Ditempatkan di poligonPane)
-$.getJSON("assets/data-spasial/Longsor.geojson", function (Bahaya) {
-    L.geoJson(Bahaya, {
+$.getJSON("assets/data-spasial/Longsor_erase.geojson", function (BahayaKec) {
+    L.geoJson(BahayaKec, {
         style: function(feature) {
             let colorMap = {
                 'Sangat Rendah': "#5db45a",
@@ -318,22 +356,59 @@ $.getJSON("assets/data-spasial/Longsor.geojson", function (Bahaya) {
                 'Tinggi': "#eb6868",
                 'Sangat Tinggi': "#c64c4c"
             };
-            let warna = colorMap[feature.properties.Bahaya] || "#ffffff";
+            let warna = colorMap[feature.properties.Keterangan] || "#ffffff";
             return { 
                 fillColor: warna, 
-                fillOpacity: 1, 
+                fillOpacity: 0.5,        // Sedikit diturunkan opacity-nya agar tidak menutupi layer dasar sepenuhnya
                 weight: 1, 
-                color: warna,
+                weightOpacity: 0.5,
+                color: colorMap,         // Garis batas antar zona dibuat putih tipis agar rapi
                 pane: 'poligonPane' 
             };
         },
         onEachFeature: function (feature, layer) {
-            layer.bindPopup('<b>Tingkat Bahaya Longsor:</b> ' + feature.properties.Bahaya);
+            layer.bindPopup('<b>Tingkat Bahaya Longsor (Kecamatan):</b> ' + feature.properties.Bahaya);
         }
     }).addTo(Grup_Longsor);
 });
 
+// =========================================================================
+// A2. Poligon Tingkat Bahaya Longsor - KHUSUS DESA CIHANJUANG
+// =========================================================================
+// Menggunakan file GeoJSON detail khusus desa Cihanjuang, sesuaikan nama filenya jika berbeda
+$.getJSON("assets/data-spasial/Longsor_Desa.geojson", function (BahayaDesa) {
+    L.geoJson(BahayaDesa, {
+        style: function(feature) {
+            let colorMap = {
+                'Sangat Rendah': "#5db45a",
+                'Rendah': "#98d3a7",
+                'Sedang': "#f1cd8b",
+                'Tinggi': "#eb6868",
+                'Sangat Tinggi': "#c64c4c"
+            };
+            let warna = colorMap[feature.properties.Keterangan] || "#ffffff";
+            return { 
+                fillColor: warna, 
+                fillOpacity: 1,        // Lebih pekat karena data skala detail/mikro desa
+                weight: 1,             // Garis pembatas zona di desa dibuat sedikit lebih tegas
+                color: colorMap,        // Outline zona khusus cihanjuang diberi warna kemerahan tipis sebagai penanda batas khusus
+                pane: 'poligonPane' 
+            };
+        },
+        onEachFeature: function (feature, layer) {
+            let properti = feature.properties;
+            let namaDesa = properti["NAMOBJ"] || "Cihanjuang";
+            layer.bindPopup(`
+                <b>Wilayah Fokus:</b> Desa ${namaDesa}<br>
+                <b>Tingkat Bahaya Longsor Detail:</b> <span style="color:#c64c4c; font-weight:bold;">${properti.Bahaya}</span>
+            `);
+        }
+    }).addTo(Grup_Longsor); // Tetap dimasukkan ke Grup_Longsor agar mati/nyala berbarengan di menu layer utama
+});
+
+// =========================================================================
 // B. Titik Bahaya Longsor (Tanda Silang Hitam ArcGIS)
+// =========================================================================
 $.getJSON("assets/data-spasial/Titik_Bahaya_Longsor.geojson", function (Kode) {
     L.geoJson(Kode, {
         pointToLayer: function(feature, latlng) {
@@ -351,7 +426,9 @@ $.getJSON("assets/data-spasial/Titik_Bahaya_Longsor.geojson", function (Kode) {
     }).addTo(Grup_Longsor);
 });
 
-// C. Titik Shelter Longsor (IKON BERUBAH SEBARAN 5 JENIS BANGUNAN + POPUP DETAIL)
+// =========================================================================
+// C. Titik Shelter Longsor (IKON BERUBAH SEBARAN 5 JENIS BANGUNAN)
+// =========================================================================
 $.getJSON("assets/data-spasial/Titik_Shelter_Longsor.geojson", function (DataShelter) {
     L.geoJson(DataShelter, {
         pointToLayer: function(feature, latlng) {
@@ -372,20 +449,16 @@ $.getJSON("assets/data-spasial/Titik_Shelter_Longsor.geojson", function (DataShe
                 return L.marker(latlng, { icon: ikonDefaultShelter });
             }
         },
-onEachFeature: function(feature, layer) {
+        onEachFeature: function(feature, layer) {
             let namaBangunan = feature.properties.Nama || feature.properties.NAMOBJ || feature.properties.Nama_Objek || "Tempat Evakuasi Akhir";
             let jenisBangunan = feature.properties.Titik_Shelter_Longsor || "Fasilitas Umum";
             let kodeShelter = feature.properties.Kode || "-";
 
-            // 1. Ambil koordinat Lat dan Lng dengan aman
             let koordinat = layer.getLatLng();
             let lat = koordinat.lat;
             let lng = koordinat.lng;
+            let googleMapsUrl = "https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lng;
 
-            // 2. Format URL Google Maps resmi tanpa ada karakter tambahan yang mengganggu
-            let googleMapsUrl = "https://www.google.com/maps/search/?api=1&query=" + lat + "," + lng;
-
-            // 3. Masukkan ke dalam popup
             layer.bindPopup(`
                 <div style="font-family: 'Montserrat', sans-serif; min-width: 200px;">
                     <h4 style="margin: 0 0 4px 0; color: #678d99; font-size: 14px;">${namaBangunan}</h4>
@@ -402,13 +475,15 @@ onEachFeature: function(feature, layer) {
     }).addTo(Grup_Longsor);
 });
 
+// =========================================================================
 // D. Jalur Evakuasi Longsor (Ditempatkan di jalurPane)
+// =========================================================================
 $.getJSON("assets/data-spasial/Jalur_Evakuasi_Longsor.geojson", function (Estimasi) {
     L.geoJson(Estimasi, {
         style: function(feature) {
             return {
                 color: dapatkanWarnaJalur(feature.properties.Estimasi),
-                weight: 5, 
+                weight: 2, 
                 opacity: 1.0, 
                 lineCap: 'round',
                 lineJoin: 'round',
@@ -426,17 +501,17 @@ $.getJSON("assets/data-spasial/Jalur_Evakuasi_Longsor.geojson", function (Estima
 // DATA PERBUNGKUS LAIN: BATAS WILAYAH & STRUKTUR GEOLOGI
 // =========================================================================
 
-// Load data poligon Batas Administrasi (Di labelPane dengan Nama Kolom "NAMOBJ")
-$.getJSON("assets/data-spasial/Area_Kecamatan.geojson", function (AdminData) {
-    L.geoJson(AdminData, {
+// 1. LOAD DATA POLIGON BATAS KECAMATAN
+$.getJSON("assets/data-spasial/Area_Kecamatan.geojson", function (AdminKecData) {
+    L.geoJson(AdminKecData, {
         style: function(feature) {
             return {
-                fillColor: "#none",       
-                fillOpacity: 0,
-                color: "#000000",         
-                weight: 2,                
-                dashArray: "6, 6",        
-                pane: 'labelPane'         
+                fillColor: "#none",       // Tidak ada warna isian di tengah
+                fillOpacity: 0,           // Transparan total agar peta dasar/bencana kelihatan
+                color: "#000000",         // Warna garis tepi Kecamatan (Hitam)
+                weight: 2.5,              // Garis tepi lebih tebal
+                dashArray: "8, 6",        // Pola garis putus-putus tebal
+                pane: 'labelPane'          
             };
         },
         onEachFeature: function (feature, layer) {
@@ -447,12 +522,42 @@ $.getJSON("assets/data-spasial/Area_Kecamatan.geojson", function (AdminData) {
                 permanent: true,          
                 direction: 'center',       
                 className: 'label-kecamatan', 
-                pane: 'labelPane'         
+                pane: 'labelPane'          
             }).openTooltip();
             
-            layer.bindPopup('<b>Wilayah Administrasi:</b> ' + namaKecamatan);
+            layer.bindPopup('<b>Kecamatan:</b> ' + namaKecamatan);
         }
     }).addTo(Batas_Admin_Group); 
+});
+
+// 2. LOAD DATA POLIGON BATAS DESA
+// Sesuaikan nama file GeoJSON desa Anda, misal: "Area_Desa.geojson"
+$.getJSON("assets/data-spasial/Admin_Desa.geojson", function (AdminDesaData) {
+    L.geoJson(AdminDesaData, {
+        style: function(feature) {
+            return {
+                fillColor: "#678d99",     // Warna isian poligon desa (Biru khas Web-GIS Anda)
+                fillOpacity: 0.05,        // Dibuat SANGAT TIPIS (5%) agar tidak menutupi layer bencana di bawahnya
+                color: "#555555",         // Warna garis pembatas antar desa (Abu-abu)
+                weight: 1.2,              // Garis pembatas desa lebih tipis
+                dashArray: "4, 4",        // Pola putus-putus rapat
+                pane: 'labelPane'          
+            };
+        },
+        onEachFeature: function (feature, layer) {
+            let properti = feature.properties;
+            // Ganti "NAMOBJ" jika nama kolom desa di GeoJSON Anda berbeda
+            let namaDesa = properti["NAMOBJ"] || "Desa/Kelurahan"; 
+            
+            layer.bindTooltip(namaDesa, {
+                permanent: false,         // Diset false agar layar HP tidak penuh sesak teks
+                direction: 'top',       
+                className: 'label-desa'
+            });
+            
+            layer.bindPopup('<b>Desa/Kelurahan:</b> ' + namaDesa);
+        }
+    }).addTo(Batas_Admin_Group); // Digabung ke group yang sama agar bisa di-toggle bareng di kontrol layer
 });
 
 // Load data garis Sesar Lembang (Putus-putus Hitam Tebal di Lapisan Teratas markerPane)
@@ -503,9 +608,10 @@ legend.onAdd = function () {
     // === Bagian 1: Judul Utama ===
     '<p style="font-size: 18px; font-weight: bold; margin-bottom: 8px; margin-top: 5px;">Legenda Peta</p>' + 
     
-    // === Bagian 2: Batas Administrasi ===
+    // === Bagian 2: Batas Administrasi (UPDATED) ===
     '<p style="font-size: 13px; font-weight: bold; margin-bottom: 5px; margin-top: 10px; border-bottom: 1px solid #ccc; padding-bottom: 3px;">Wilayah Administrasi</p>' +
     '<div style="border: 2px dashed #000000; background-color: transparent; height: 12px; width: 20px; display: inline-block; margin-right: 8px; vertical-align: middle;"></div> Batas Kecamatan<br>' +
+    '<div style="border: 1.2px dashed #555555; background-color: rgba(103, 141, 153, 0.15); height: 12px; width: 20px; display: inline-block; margin-right: 8px; vertical-align: middle;"></div> Batas Desa / Kelurahan<br>' +
 
     // === SEKARANG DI SINI: Titik Evakuasi / Shelter ===
     '<p style="font-size: 13px; font-weight: bold; margin-bottom: 5px; margin-top: 15px; border-bottom: 1px solid #ccc; padding-bottom: 3px;">Titik Evakuasi (Shelter)</p>' +
