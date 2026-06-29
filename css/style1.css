@@ -203,98 +203,101 @@ body {
     }
 
  /* ==========================================================================
-   PERBAIKAN TOTAL LAYOUT PIRAMIDA SESAR SECTION DI HP
-   (Masukkan di dalam @media max-width: 900px)
+   MODE SCROLL VERTIKAL (SITU CARD PER BARIS KEBANAH) DI HP
+   (Ganti kode sesar di dalam @media max-width: 900px Anda)
    ========================================================================== */
 @media (max-width: 900px) {
 
-    /* 1. PAKSA CONTAINER UNTUK MENGAKTIFKAN WRAP (PATAH BARIS) */
+    /* 1. Paksa container utama menyusun elemen secara vertikal ke bawah */
     #sesar-section .container { 
         display: flex !important;
-        flex-direction: row !important; 
-        flex-wrap: wrap !important;       /* KUNCI UTAMA: mengizinkan card turun baris */
-        overflow-x: visible !important;   /* Matikan scroll menyamping */
-        justify-content: center !important; 
-        gap: 20px 15px !important;              
-        padding: 0 15px 10px 15px !important; 
+        flex-direction: column !important; /* Susun card 1 per 1 ke bawah */
+        align-items: center !important;
+        gap: 25px !important;              /* Jarak antar card agar tidak menempel */
+        padding: 0 15px !important;
         width: 100% !important;
+        overflow-x: visible !important;
     }
 
-    /* === BARIS 1: CARD PERTAMA (SEJARAH) MELEBAR PENUH DI ATAS === */
-    #sesar-section .container .column:flex-first,
-    #sesar-section .container .column:first-child {
-        flex: 0 0 100% !important;        /* Lebar 100% penuh */
-        max-width: 100% !important;
+    /* 2. Buat semua card mengambil lebar penuh layar HP */
+    .column { 
+        flex: 0 0 100% !important; 
         width: 100% !important;
-        margin-bottom: 5px !important;
+        max-width: 480px !important;       /* Batasi lebar maksimal agar tetap proporsional di HP */
+        margin-bottom: 0 !important;       
+    } 
+
+    .data-item {
+        margin: 0 !important;
+        height: auto !important;
+        overflow: visible !important;      
     }
 
-    /* === BARIS 2: CARD KEDUA & KETIGA SEJAJAR BERDUA DI BAWAH === */
-    #sesar-section .container .column:not(:first-child) {
-        flex: 0 0 calc(50% - 10px) !important; /* Bagi dua rata kanan-kiri */
-        width: calc(50% - 10px) !important;
-        min-width: 140px !important;    
+    /* ==========================================
+       B. STRUKTUR YANG SAMA UNTUK 2 CARD SLIDER
+       ========================================== */
+    .slider-container {
+        width: 100% !important;
+        padding: 0 !important;
     }
 
-    /* === SAMAKAN STRUKTUR PADA 2 CARD SLIDER ATASNYA === */
     .slider-wrapper {
         display: flex !important;
-        flex-wrap: wrap !important;
-        flex-direction: row !important;
-        justify-content: center !important; 
-        gap: 15px !important;
+        flex-direction: column !important; /* Ikut susun ke bawah 1 per 1 */
+        align-items: center !important;
+        gap: 25px !important;
         width: 100% !important;
     }
 
     .custom-card-slider {
-        flex: 0 0 calc(50% - 10px) !important; 
-        width: calc(50% - 10px) !important;
-        min-width: 140px !important;
+        flex: 0 0 100% !important; 
+        width: 100% !important;
+        max-width: 480px !important;       /* Disamakan ukurannya dengan card di atas */
         margin: 0 !important;
     }
 
-    /* === PENYELAMAT TEKS TENGGELAM (SEMUA CARD) === */
+    /* ==========================================
+       C. FORMULA TINGGI OTOMATIS (ANTI TENGGELAM)
+       ========================================== */
     .description, 
     .custom-card-slider {
-        height: auto !important;         /* Matikan gembok 350px */
-        min-height: 350px !important;    /* Tinggi minimal untuk baris ke-2 agar sejajar */
+        height: auto !important;           /* Bebaskan gembok kaku 350px */
+        min-height: auto !important;       /* Biarkan tinggi menyesuaikan teks secara alami */
         display: flex !important;
         flex-direction: column !important;
-        padding: 15px !important;        
-    }
-
-    /* Card sejarah tidak perlu min-height tinggi karena sudah lebar */
-    #sesar-section .container .column:first-child .description {
-        min-height: auto !important;
-    }
-
-    .description p,
-    .custom-card-slider p {
-        flex-grow: 1 !important;         /* Dorong tombol ke dasar boks */
-        font-size: 13px !important;       
-        line-height: 1.4 !important;
-        margin-bottom: 15px !important;
+        padding: 20px !important;        
     }
 
     .description h3,
     .custom-card-slider h3 {
-        font-size: 16px !important;       
-        margin-bottom: 8px !important;
+        font-size: 20px !important;        /* Ukuran judul card yang pas di HP */
+        margin-bottom: 10px !important;
+        text-align: center !important;
     }
 
+    .description p,
+    .custom-card-slider p {
+        flex-grow: 1 !important;           /* Mendorong tombol ke posisi paling bawah */
+        font-size: 14px !important;       
+        line-height: 1.5 !important;
+        margin-bottom: 20px !important;    /* Jarak aman sebelum tombol */
+    }
+
+    /* Pengaturan tombol di dasar card */
     .read-more-btn,
     .btn-slider {
         margin-top: auto !important;     
-        width: 100% !important;
+        width: 100% !important;            /* Lebar penuh agar mudah ditap jempol */
         display: block !important;
         text-align: center !important;
-        font-size: 12px !important;
-        padding: 10px 0 !important;
+        font-size: 14px !important;
+        padding: 12px 0 !important;
+        box-sizing: border-box !important;
     }
 
     .data-item img {
-        width: 35% !important;            
-        margin: 15px auto 0 auto !important;
+        width: 45% !important;            /* Ukuran gambar proporsional di HP */
+        margin: 20px auto 0 auto !important;
     }
 }
 /* SECTION 1 */
