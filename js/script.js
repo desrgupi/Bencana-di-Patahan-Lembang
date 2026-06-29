@@ -531,7 +531,6 @@ $.getJSON("assets/data-spasial/Area_Kecamatan.geojson", function (AdminKecData) 
 });
 
 // 2. LOAD DATA POLIGON BATAS DESA
-// Sesuaikan nama file GeoJSON desa Anda, misal: "Area_Desa.geojson"
 $.getJSON("assets/data-spasial/Admin_Desa.geojson", function (AdminDesaData) {
     L.geoJson(AdminDesaData, {
         style: function(feature) {
@@ -546,21 +545,69 @@ $.getJSON("assets/data-spasial/Admin_Desa.geojson", function (AdminDesaData) {
         },
         onEachFeature: function (feature, layer) {
             let properti = feature.properties;
-            // Ganti "NAMOBJ" jika nama kolom desa di GeoJSON Anda berbeda
             let namaDesa = properti["NAMOBJ"] || "Desa/Kelurahan"; 
             
             layer.bindTooltip(namaDesa, {
-                permanent: false,         // Diset false agar layar HP tidak penuh sesak teks
+                permanent: false,         
                 direction: 'top',       
                 className: 'label-desa'
             });
             
             layer.bindPopup('<b>Desa/Kelurahan:</b> ' + namaDesa);
         }
-    }).addTo(Batas_Admin_Group); // Digabung ke group yang sama agar bisa di-toggle bareng di kontrol layer
+    }).addTo(Batas_Admin_Group); 
 });
 
-// Load data garis Sesar Lembang (Putus-putus Hitam Tebal di Lapisan Teratas markerPane)
+/// =========================================================================
+// 3. LOAD DATA TITIK KANTOR DESA CIHANJUANG (KODE YANG BENAR)
+// =========================================================================
+$.getJSON("assets/data-spasial/kantor.geojson", function (KantorData) {
+    L.geoJson(KantorData, {
+        pointToLayer: function(feature, latlng) {
+            const iconKantorDesa = L.divIcon({
+                className: 'custom-kantor-desa-icon',
+                // Perpaduan pin penanda dan ikon gedung internal (Font Awesome)
+                html: `
+                    <div style="position: relative; width: 30px; height: 30px; text-align: center;">
+                        <i class="fa-solid fa-location-pin" style="font-size: 32px; color: #1e3d59;"></i>
+                        <i class="fa-solid fa-building-flag" style="font-size: 11px; color: #ffffff; position: absolute; top: 6px; left: 50%; transform: translateX(-50%);"></i>
+                    </div>
+                `,
+                iconSize: [30, 35],
+                iconAnchor: [15, 32],
+                popupAnchor: [0, -30]
+            });
+            // Return marker ditaruh di dalam fungsi pointToLayer
+            return L.marker(latlng, { icon: iconKantorDesa });
+        }, // Batas akhir penutup fungsi pointToLayer yang benar
+        
+        onEachFeature: function(feature, layer) {
+            let properti = feature.properties;
+            let namaKantor = properti["Nama"] || properti["NAMOBJ"] || "Kantor Desa Cihanjuang";
+            
+            let koordinat = layer.getLatLng();
+            let lat = koordinat.lat;
+            let lng = koordinat.lng;
+            
+            // Format link rute navigasi Google Maps resmi
+            let googleMapsUrl = "https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lng;
+
+            layer.bindPopup(`
+                <div style="font-family: 'Montserrat', sans-serif; min-width: 180px;">
+                    <h4 style="margin: 0 0 4px 0; color: #305466; font-size: 13px;">${namaKantor}</h4>
+                    <span style="background-color: #678d99; color: white; padding: 2px 6px; font-size: 10px; font-weight: bold; border-radius: 3px; display: inline-block; margin-bottom: 8px;">Pusat Administrasi Desa</span>
+                    <p style="margin: 0; font-size: 11px; color: #555;"><b>Wilayah:</b> Kec. Parongpong</p>
+                    
+                    <a href="${googleMapsUrl}" target="_blank" rel="noopener noreferrer" style="display: block; text-align: center; background-color: #e76f51; color: white; text-decoration: none; font-size: 11px; font-weight: bold; padding: 6px 10px; border-radius: 4px; margin-top: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">
+                        📍 Rute Menuju Lokasi
+                    </a>
+                </div>
+            `);
+        }
+    }).addTo(Batas_Admin_Group); 
+});
+
+// 4. LOAD DATA GARIS SESAR LEMBANG
 $.getJSON("assets/data-spasial/Sesar_Lembang.geojson", function (SesarData) {
     L.geoJson(SesarData, {
         style: function(feature) {
@@ -579,7 +626,6 @@ $.getJSON("assets/data-spasial/Sesar_Lembang.geojson", function (SesarData) {
         }
     }).addTo(Sesar_Lembang); 
 });
-
 
 // =========================================================================
 // 4. MANAJEMEN TAMPILAN DEFAULT & LAYER CONTROL (MENU LAYERS)
@@ -608,11 +654,16 @@ legend.onAdd = function () {
     // === Bagian 1: Judul Utama ===
     '<p style="font-size: 18px; font-weight: bold; margin-bottom: 8px; margin-top: 5px;">Legenda Peta</p>' + 
     
-    // === Bagian 2: Batas Administrasi (UPDATED) ===
+   // === Bagian 2: Batas Administrasi (UPDATED) ===
     '<p style="font-size: 13px; font-weight: bold; margin-bottom: 5px; margin-top: 10px; border-bottom: 1px solid #ccc; padding-bottom: 3px;">Wilayah Administrasi</p>' +
     '<div style="border: 2px dashed #000000; background-color: transparent; height: 12px; width: 20px; display: inline-block; margin-right: 8px; vertical-align: middle;"></div> Batas Kecamatan<br>' +
     '<div style="border: 1.2px dashed #555555; background-color: rgba(103, 141, 153, 0.15); height: 12px; width: 20px; display: inline-block; margin-right: 8px; vertical-align: middle;"></div> Batas Desa / Kelurahan<br>' +
-
+    
+    // KODE BARU: Polos tanpa box pembungkus luar
+    '<i class="fa-solid fa-location-pin" style="font-size: 20px; color: #1e3d59; display: inline-block; margin-right: 12px; vertical-align: middle; position: relative;">' +
+        '<i class="fa-solid fa-building-flag" style="font-size: 7px; color: #ffffff; position: absolute; top: 4px; left: 50%; transform: translateX(-50%); font-family: \'Font Awesome 6 Free\'; font-weight: 900;"></i>' +
+    '</i>Kantor Desa Cihanjuang<br>' +
+    
     // === SEKARANG DI SINI: Titik Evakuasi / Shelter ===
     '<p style="font-size: 13px; font-weight: bold; margin-bottom: 5px; margin-top: 15px; border-bottom: 1px solid #ccc; padding-bottom: 3px;">Titik Evakuasi (Shelter)</p>' +
     '<img src="assets/sekolah.png" style="height: 16px; width: 16px; margin-right: 12px; vertical-align: middle;">Fasilitas Pendidikan<br>' +
